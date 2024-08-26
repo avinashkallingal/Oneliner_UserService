@@ -17,7 +17,7 @@ const startServer = async () => {
         })
 
     } catch (error) {
-        console.log('error in server.ts --> ', error);
+        console.log('error in server.ts --> ', error); 
     }
 }
 
