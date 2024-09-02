@@ -4,7 +4,7 @@ import { IUser } from '../domain/entities/IUser';
 export interface IUserDocument extends IUser, Document { }
 
 const userSchema: Schema = new Schema({
-  name: {
+  username: {
     type: String,
     required: true,
     minlength: 3,
@@ -20,6 +20,16 @@ const userSchema: Schema = new Schema({
     type: String,
     required: true,
     minlength: 6,
+  },
+  gender: {
+    type: String,
+    required: true,
+   
+  },  
+  language: {
+    type: String,
+    required: true,
+    
   },
   profilePicture: {
     type: String,

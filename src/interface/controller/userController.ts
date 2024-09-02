@@ -56,6 +56,17 @@ class UserController {
         }
     }
 
+    async resendOtp(data: any) {
+        try {
+            console.log(data);
+            const result = await this.userService.resendOtp(data);
+            return result;
+            
+        } catch (error) {
+            console.log('error in the verifyEmail -->', error);
+        }
+    }
+
     async resetPassword(data: any) {
         try {
             console.log(data);

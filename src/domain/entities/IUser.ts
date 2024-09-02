@@ -2,6 +2,8 @@ export interface IUser {
     name: string;
     email: string;
     password: string;
+    gender: string;
+    language:string;
     profilePicture?: string;
     followers?: string[];
     followings?: string[];

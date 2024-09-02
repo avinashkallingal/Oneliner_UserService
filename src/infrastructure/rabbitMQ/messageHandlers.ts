@@ -9,7 +9,9 @@ export default class MessageHandlers {
 
         switch (operation) {
             case 'register_user':
-                console.log('Handling operation:', operation);
+                console.log('Handling operation:', operation); 
+                // console.log("hi i am avinash")
+                // response="hi its response avinash"
                 response = await userController.registerUser(data);
                 break;
             case 'save_user':
@@ -20,30 +22,18 @@ export default class MessageHandlers {
                 console.log('Handling operation :', operation);
                 response = await userController.loginUser(data);
                 break;
-            case 'verify_Email':
+            case 'verify_email':
                 console.log('Handling operation : ', operation);
                 response = await userController.verifyEmail(data);
+                break;
+            case 'resend_otp':
+                console.log('Handling operation :', operation);
+                response = await userController.resendOtp(data);
                 break;
             case 'reset_password':
                 console.log('Handling operation :', operation);
                 response = await userController.resetPassword(data);
-                break;
-            case 'google_login':
-                console.log('Handling operation :', operation);
-                response = await userController.loginWithGoogle(data);
-                break;
-            case 'admin_login':
-                console.log('Handling operation', operation);
-                response = await AdminController.login(data)
-                break;
-            case 'user_list':
-                console.log('Handling operation :', operation);
-                response = await AdminController.userList();
-                break;
-            case 'change_status':
-                console.log('Handling operation :', operation);
-                response = await AdminController.changeStatus(data);
-                break;
+                break;         
             default:
                 response = { error: 'Operation not supported' };
                 break;
