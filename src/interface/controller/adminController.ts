@@ -15,6 +15,7 @@ class adminController {
         try {
             // const email = data.email;
             // const password = data.password;
+            console.log(data);
             const result = await this.adminService.adminLogin(data);
             return result;
         } catch (error) {

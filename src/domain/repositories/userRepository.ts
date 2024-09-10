@@ -92,6 +92,63 @@ export class UserRepository {
         }
     }
 
+    async updateUserProfile(data: any): Promise<IUser | null> {
+        try {
+            const currentUser = await User.findById(data.id);
+            console.log('Current User:', currentUser);
+            console.log('New Data:', data.data);
+            interface updateUser{
+                username?:string;
+                profilePicture?:string;
+                gender?:string;
+                language?:string;
+                about?:string
+            }
+
+            //avoinding null updation and validation
+            const updateFields:updateUser = {};
+            if (data.data.username !== undefined && data.data.username.length !== 0) {
+              updateFields.username = data.data.username;
+            }
+            if (data.data.gender !== undefined && data.data.gender !== 0) {
+              updateFields.gender = data.data.gender;
+            }
+            if (data.image !== undefined || data.image !== null || data.image !== '') {
+              updateFields.profilePicture = data.image;
+            }
+            if (data.data.language !== undefined || data.data.language !== null) {
+                updateFields.language = data.data.language;
+              }
+              if (data.data.about !== undefined || data.data.about !== null) {
+                updateFields.about = data.data.about;
+              }
+            console.log(updateFields,"updated fields from react body")
+    
+            // Update the user in the database
+           
+            //
+
+            const userExist = await User.updateOne(
+                { _id: data.id },
+                { $set: updateFields }
+            );
+
+            console.log(userExist, '-------------============== 50');
+
+            if (userExist.modifiedCount > 0) {
+                const updatedUser = await User.findById(data.id);
+                return updatedUser;
+            } else {
+                console.log('No changes were made to the document.');
+                return null;
+            }
+        } catch (error) {
+            console.error('Error updating user profile:', error);
+            return null;
+        }
+    }
+
+
 
 }
 

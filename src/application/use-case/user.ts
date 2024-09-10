@@ -2,6 +2,8 @@ import { IUser } from "../../domain/entities/IUser";
 import { UserRepository } from "../../domain/repositories/userRepository";
 import { generateOtp } from "../../utils/generateOTP";
 import { sendOtpEmail } from "../../utils/emialVerification";
+import { fetchFileFromS3, uploadFileToS3 } from "../../infrastructure/s3/s3Actions";
+
 
 
 interface user {
@@ -118,13 +120,13 @@ export class UserService {
 
     async loginWithGoogle(data: any): Promise<any> {
         try {
-            const email = data.email;
-            const name = data.fullname;
+            const email = data.decoded.email;
+            const username = data.decoded.name;
             let user = await this.userRepo.findEmail(email);
             if (!user) {
                 user = await this.userRepo.saveUser({
                     email,
-                    name,
+                    username,
                     password: 'defaultpassword',
                 } as IUser)
             }
@@ -144,6 +146,47 @@ export class UserService {
             throw error;
         }
     }
+    
+     async userDataFetch(email: string): Promise<any> {
+        try {
+            let user = await this.userRepo.findEmail(email);
+            if(user){
+                return { success: true, message: 'Got user data', user_data: user };
+            }
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Error userdata fetch: ${error.message}`);
+            }
+            throw error;
+        }
+    }
+
+    async updateUserProfile(data: any): Promise<{ success: boolean; message: string; avatarUrl?: string }> {
+        try {
+            console.log(data, 'data in application user.ts');
+            let profile_pic: string = ''
+            if (data.image) {
+                const buffer = Buffer.isBuffer(data.image.buffer) ? data.image.buffer : Buffer.from(data.image.buffer);
+                const key = await uploadFileToS3(buffer, data.image.originalname);
+                profile_pic = await fetchFileFromS3(key, 604800);
+            }
+            console.log(profile_pic, '------------------')
+            data.image = profile_pic||undefined
+            const updateUser = await this.userRepo.updateUserProfile(data);
+            console.log(updateUser, '-----------')
+            if (!updateUser) {
+                console.log('if')
+                return { success: false, message: 'Profile is uptoDate' }
+            }
+            console.log('outside if')
+            return { success: true, message: 'updated success', avatarUrl: profile_pic };
+        } catch (error) {
+            console.log('Error in updateUserProfile in application user userService');
+            return { success: false, message: 'internal server error' };
+        }
+    }
+
 
 }
 

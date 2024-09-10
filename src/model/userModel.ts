@@ -23,12 +23,17 @@ const userSchema: Schema = new Schema({
   },
   gender: {
     type: String,
-    required: true,
+    default: 'Not added',
    
   },  
   language: {
     type: String,
-    required: true,
+    default: 'Not added',
+        
+  },
+  about: {
+    type: String,
+    default: 'Not added',
     
   },
   profilePicture: {

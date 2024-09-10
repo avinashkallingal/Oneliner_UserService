@@ -86,6 +86,27 @@ class UserController {
             console.log('error in the loginwithgoogle userController -->', error);
         }
     }
+    
+    async userDataFetch(data: any) {
+        try {
+            console.log(data);
+            const result = await this.userService.userDataFetch(data.email);
+            return result;
+        } catch (error) {
+            console.log('error in the loginwithgoogle userController -->', error);
+        }
+    }
+
+    async updateUserProfile(data: any) {
+        try {
+            console.log(data);
+            const result = await this.userService.updateUserProfile(data);
+            console.log(result, '=======')
+            return result
+        } catch (error) {
+            console.log('Error in teh updateUserProfile userControler userService -->', error)
+        }
+    }
 
 }
 

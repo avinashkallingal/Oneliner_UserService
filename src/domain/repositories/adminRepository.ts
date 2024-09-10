@@ -6,7 +6,8 @@ export class AdminRepositoty {
 
     async checkAdmin(email: string, password: string): Promise<any> {
         try {
-            const admin_data = await User.findOne({ email }).exec();
+            const admin_data = await User.findOne({ email:email }).exec();
+            console.log(email," email from client ",admin_data," admin data from db")
             if (!admin_data) {
                 return { success: false, message: "Incorrect Email Address or Password" };
             }
@@ -22,7 +23,7 @@ export class AdminRepositoty {
 
             }
 
-            return { success: true, message: "logged in succesful", data: admin_data };
+            return { success: true, message: "logged in succesful",admin_data };
 
         } catch (error) {
             const err = error as Error;
@@ -42,10 +43,12 @@ export class AdminRepositoty {
         }
     }
 
-    async changeStatus(email: string, isBlocked: boolean): Promise<{ success: boolean; message: string }> {
+    async changeStatus(email: string, isBlocked: boolean): Promise<{ success: boolean; message: string; blocked?:boolean}> {
         try {
             // Find the user by email
             const userData = await User.findOne({ email });
+            console.log(email," email coming to admin repo")
+          
 
             if (!userData) {
                 return { success: false, message: 'User not found' };
@@ -54,10 +57,11 @@ export class AdminRepositoty {
             // Toggle the isBlocked status
             
             
-            const updated = await User.updateOne({ email: email }, { $set: { isBlocked: isBlocked } });
+            const updated = await User.updateOne({ email: email }, { $set: { isBlocked: !userData.isBlocked } });
+            console.log(updated," updated db response in admin repo")
             console.log('Matched:', updated.matchedCount, 'Modified:', updated.modifiedCount);
             if (updated.modifiedCount == 1) {
-                return { success: true, message: 'Status of the user is changed' };
+                return { success: true, message: 'Status of the user is changed',blocked:!userData.isBlocked };
             } else {
                 return { success: false, message: 'Something went wrong. Try again later' };
             }
