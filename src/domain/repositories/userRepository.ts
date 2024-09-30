@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { IUserDocument, User } from '../../model/userModel'
 import mongoose from "mongoose";
 import { devNull } from "os";
+import { IUserDetails, IUserPostDetails } from "../../domain/entities/IUserDeatils";
 
 export class UserRepository {
 
@@ -147,7 +148,26 @@ export class UserRepository {
             return null;
         }
     }
+    async findUserDetailsForPost(userId: string): Promise<{ success: boolean; message: string; data?: IUserPostDetails }> {
+        try {
+            console.log('3', userId);
+            const user = await User.findById(userId).exec() as IUser | null;
+            console.log(user, '----------------------user data');
+            if (!user) {
+                return { success: false, message: "No user found" };
+            }
 
+            const datas: IUserPostDetails = {
+                id: userId,
+                name: user.username
+            };
+
+            return { success: true, message: "Data found", data: datas };
+        } catch (error) {
+            console.error("Error fetching user data", error);
+            return { success: false, message: `Error fetching user data: ${(error as Error).message}` };
+        }
+    }
 
 
 }

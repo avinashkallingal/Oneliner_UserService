@@ -64,6 +64,11 @@ export default class MessageHandlers {
         console.log("Handling operation", operation);
         response = await userController.updateUserProfile(data);
         break;
+      case "get-user-deatils-for-post":
+        console.log("Handling operation : ", operation);
+        console.log(data);
+        response = await userController.fetchDataForPost(data);
+        break;
 
       default:
         response = { error: "Operation not supported" };

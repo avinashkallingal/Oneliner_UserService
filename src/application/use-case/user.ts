@@ -3,6 +3,7 @@ import { UserRepository } from "../../domain/repositories/userRepository";
 import { generateOtp } from "../../utils/generateOTP";
 import { sendOtpEmail } from "../../utils/emialVerification";
 import { fetchFileFromS3, uploadFileToS3 } from "../../infrastructure/s3/s3Actions";
+import { IUserDetails, IUserPostDetails } from "../../domain/entities/IUserDeatils";
 
 
 
@@ -159,6 +160,20 @@ export class UserService {
                 throw new Error(`Error userdata fetch: ${error.message}`);
             }
             throw error;
+        }
+    }
+    async fetchUserDatasForPost(userId: string): Promise<{ success: boolean; message: string; data?: IUserPostDetails }> {
+        try {
+            console.log('2')
+            const result = await this.userRepo.findUserDetailsForPost(userId);
+            if (!result || !result.data) {
+                return { success: false, message: "No data foudn" };
+            }
+
+            return { success: true, message: "Data found", data: { id: result.data.id, name: result.data.name } };
+        } catch (error) {
+            console.error("Error fetching user data for post:", error);
+            throw new Error("Error occurred while fetching user data for post");
         }
     }
 

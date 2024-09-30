@@ -1,4 +1,5 @@
 import { UserService } from "../../application/use-case/user";
+import { IUserDetails, IUserPostDetails } from "../../domain/entities/IUserDeatils";
 
 class UserController {
 
@@ -105,6 +106,34 @@ class UserController {
             return result
         } catch (error) {
             console.log('Error in teh updateUserProfile userControler userService -->', error)
+        }
+    }
+    async fetchDataForPost(data: { userIds: string[] }): Promise<{ success: boolean; message: string; data?: IUserPostDetails[] }> {
+        try {
+            console.log('1', data)
+            const results = await Promise.all(data.userIds.map(async (userId) => {
+                return this.userService.fetchUserDatasForPost(userId);
+            }));
+
+            const successfulResult = results.filter(result => result.success).map(result => result.data);
+
+            if (successfulResult.length > 0) {
+                return {
+                    success: true,
+                    message: "data found",
+                    data: successfulResult as IUserPostDetails[]
+                };
+            } else {
+                return {
+                    success: false,
+                    message: 'No data found'
+                }
+            }
+        } catch (error) {
+
+            console.log('error in the fetchDataForPost usercontroller -->', error);
+            console.error("Error fetching user data:", error);
+            throw new Error("Error occurred while fetching user data");
         }
     }
 
