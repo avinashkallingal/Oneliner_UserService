@@ -60,6 +60,18 @@ export default class MessageHandlers {
         console.log("Handling operation :", operation);
         response = await userController.userDataFetch(data);
         break;
+        case "contacts_fetch":
+        console.log("Handling operation :", operation);
+        response = await userController.contactsFetch(data);
+        break;
+        case "follow_user":
+          console.log("Handling operation :", operation);
+          response = await userController.followUser(data);
+          break;
+          case "unFollow_user":
+          console.log("Handling operation :", operation);
+          response = await userController.unFollowUser(data);
+          break;
       case "update-UserData":
         console.log("Handling operation", operation);
         response = await userController.updateUserProfile(data);

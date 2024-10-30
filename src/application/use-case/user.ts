@@ -148,11 +148,65 @@ export class UserService {
         }
     }
     
-     async userDataFetch(email: string): Promise<any> {
+     async userDataFetch(data: any): Promise<any> {
         try {
-            let user = await this.userRepo.findEmail(email);
-            if(user){
-                return { success: true, message: 'Got user data', user_data: user };
+            let user = await this.userRepo.findEmail(data.id);
+            let loginUser=await this.userRepo.findEmail(data.loginUserId)
+           
+            if(user&&loginUser){
+            
+                const combine = 
+                {
+                   ...user,
+                   loginUserFollowings: loginUser?.followings,
+                };
+
+                return { success: true, message: 'Got user data', user_data: combine};
+            }
+            return { success: false, message: 'User or login user not found' };
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Error userdata fetch: ${error.message}`);
+            }
+            throw error;
+        }
+    }
+
+    async contactsFetch(data: any): Promise<any> {
+        try {
+            const user = await this.userRepo.findEmail(data.id);
+            
+            
+            if (user && user.followings) {  // Check that followings is defined
+                const contacts = await Promise.all(
+                    user.followings.map(async (val) => {
+                        return await this.userRepo.findEmail(val);
+                    })
+                );
+    
+                return { success: true, message: 'Got contacts data', contacts_data: contacts };
+            }
+    
+            return { success: false, message: 'Error fetching contacts data' };
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Error userdata fetch: ${error.message}`);
+            }
+            throw error;
+        }
+    }
+    
+
+
+    async followUser(data: string): Promise<any> {
+        try {
+            let user = await this.userRepo.followUser(data);
+            if(user.success){
+                return { success: true, message: 'followingabc done' };
+            }else{
+                return { success: false, message: 'following error' };
             }
         }
         catch (error) {
@@ -162,6 +216,26 @@ export class UserService {
             throw error;
         }
     }
+
+    async unFollowUser(data: string): Promise<any> {
+        try {
+            let user = await this.userRepo.unFollowUser(data);
+            if(user.success){
+                return { success: true, message: 'unfollowing done' };
+            }else{
+                return { success: false, message: 'unfollowing error' };
+            }
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Error userdata fetch: ${error.message}`);
+            }
+            throw error;
+        }
+    }
+
+
+
     async fetchUserDatasForPost(userId: string): Promise<{ success: boolean; message: string; data?: IUserPostDetails }> {
         try {
             console.log('2')

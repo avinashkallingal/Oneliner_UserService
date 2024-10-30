@@ -91,12 +91,43 @@ class UserController {
     async userDataFetch(data: any) {
         try {
             console.log(data);
-            const result = await this.userService.userDataFetch(data.email);
+            const result = await this.userService.userDataFetch(data);
             return result;
         } catch (error) {
             console.log('error in the loginwithgoogle userController -->', error);
         }
     }
+    
+    async contactsFetch(data: any) {
+        try {
+            console.log(data);
+            const result = await this.userService.contactsFetch(data);
+            return result;
+        } catch (error) {
+            console.log('error in the loginwithgoogle userController -->', error);
+        }
+    }
+    
+    async followUser(data: any) {
+        try {
+            console.log(data);
+            const result = await this.userService.followUser(data);
+            return result;
+        } catch (error) {
+            console.log('error in the loginwithgoogle userController -->', error);
+        }
+    }
+
+    async unFollowUser(data: any) {
+        try {
+            console.log(data);
+            const result = await this.userService.unFollowUser(data);
+            return result;
+        } catch (error) {
+            console.log('error in the loginwithgoogle userController -->', error);
+        }
+    }
+
 
     async updateUserProfile(data: any) {
         try {

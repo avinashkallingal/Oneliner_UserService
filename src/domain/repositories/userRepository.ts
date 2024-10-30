@@ -7,9 +7,10 @@ import { IUserDetails, IUserPostDetails } from "../../domain/entities/IUserDeati
 
 export class UserRepository {
 
-    async findEmail(email: string): Promise<IUser | null> {
+    async findEmail(id: string): Promise<IUser | null> {
         try {
-            const user = await User.findOne({ email: email });
+            const user = await User.findOne({ _id: id });
+            
             return user
         } catch (error) {
             const err = error as Error;
@@ -17,6 +18,7 @@ export class UserRepository {
             return null
         }
     }
+   
 
     async saveUser(data: IUser): Promise<IUser> {
         try {
@@ -89,7 +91,58 @@ export class UserRepository {
             }
 
         } catch (error) {
+            const err = error as Error;
+            console.error("Error saving user:", err);
+            throw new Error(`Error saving user: ${err.message}`);
+        }
+    }
 
+    async followUser(data:any): Promise<any> {
+        try {
+           
+            const res = await User.updateOne({ _id: data.userId }, { $push: { followings: data.followId } });
+            const res1 = await User.updateOne({ _id: data.followId }, { $push: { followers: data.userId } });
+            if (res.modifiedCount > 0) {
+                return { success: true, message: 'follow done' }
+            } 
+            if (res1.modifiedCount > 0) {
+                return { success: true, message: 'follow done' }
+            }
+          
+                console.log(res,res1,'  default return flase in follow function')
+                return { success: false, message: 'Something went wrong, Plase try again later.' }          
+                
+           
+
+        } catch (error) {
+            const err = error as Error;
+            console.error("Error saving user:", err);
+            throw new Error(`Error saving user: ${err.message}`);
+        }
+    }
+
+
+    async unFollowUser(data:any): Promise<any> {
+        try {
+           
+            const res = await User.updateOne({ _id: data.userId }, { $pull: { followings: data.followId } });
+            const res1 = await User.updateOne({ _id: data.followId }, { $pull: { followers: data.userId } });
+            if (res.modifiedCount > 0) {
+                return { success: true, message: 'unfollow done' }
+            } 
+            if (res1.modifiedCount > 0) {
+                return { success: true, message: 'unfollow done' }
+            }
+          
+                console.log(res,res1,'  default return flase in unfollow function')
+                return { success: false, message: 'Something went wrong, Plase try again later.' }          
+                
+           
+
+        } catch (error) {
+            const err = error as Error;
+            console.error("Error saving user:", err);
+            throw new Error(`Error saving user: ${err.message}`);
         }
     }
 
