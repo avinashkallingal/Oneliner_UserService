@@ -153,7 +153,7 @@ export class UserService {
             let user = await this.userRepo.findEmail(data.id);
             let loginUser=await this.userRepo.findEmail(data.loginUserId)
            
-            if(user&&loginUser){
+            if(user||loginUser){
             
                 const combine = 
                 {
