@@ -97,6 +97,16 @@ class UserController {
             console.log('error in the loginwithgoogle userController -->', error);
         }
     }
+
+    async userDataFetchForInbox(data: any) {
+        try {
+            console.log(data);
+            const result = await this.userService.userDataFetchForInbox(data);
+            return result;
+        } catch (error) {
+            console.log('error in the loginwithgoogle userController -->', error);
+        }
+    }
     
     async contactsFetch(data: any) {
         try {

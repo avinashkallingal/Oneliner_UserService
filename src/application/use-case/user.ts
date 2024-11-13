@@ -173,6 +173,27 @@ export class UserService {
         }
     }
 
+    async userDataFetchForInbox(data: any): Promise<any> {
+        try {
+            let user = await this.userRepo.findEmail(data.userId);
+   
+           
+            if(user){        
+               
+
+                return { success: true, message: 'Got user data for inbox', user_data: user};
+            }
+            return { success: false, message: 'User or login user not found' };
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Error userdata fetch: ${error.message}`);
+            }
+            throw error;
+        }
+    }
+
+
     async contactsFetch(data: any): Promise<any> {
         try {
             const user = await this.userRepo.findEmail(data.id);

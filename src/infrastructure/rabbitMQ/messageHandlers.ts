@@ -60,6 +60,11 @@ export default class MessageHandlers {
         console.log("Handling operation :", operation);
         response = await userController.userDataFetch(data);
         break;
+        
+        case "fetch-user-for-inbox":
+        console.log("Handling operation :", operation);
+        response = await userController.userDataFetchForInbox(data);
+        break;
         case "contacts_fetch":
         console.log("Handling operation :", operation);
         response = await userController.contactsFetch(data);
