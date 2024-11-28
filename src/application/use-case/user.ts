@@ -68,7 +68,7 @@ export class UserService {
 
     async verifyEmail(email: string): Promise<any> {
         try {
-            const user = await this.userRepo.findEmail(email);
+            const user = await this.userRepo.findEmailForForgotPass(email);
             console.log(user, 'user service in email verification');
             if (user) {
                 const otp = generateOtp();
@@ -123,7 +123,7 @@ export class UserService {
         try {
             const email = data.decoded.email;
             const username = data.decoded.name;
-            let user = await this.userRepo.findEmail(email);
+            let user = await this.userRepo.findEmailForForgotPass(email);
             if (!user) {
                 user = await this.userRepo.saveUser({
                     email,
@@ -219,6 +219,25 @@ export class UserService {
         }
     }
     
+    async searchUser(data: any): Promise<any> {
+        try {
+            let user = await this.userRepo.searchUser(data);
+   
+           
+            if(user){        
+               
+
+                return { success: true, message: 'Got user matching', user_data: user};
+            }
+            return { success: false, message: 'User or login user not found' };
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                throw new Error(`Error userdata fetch: ${error.message}`);
+            }
+            throw error;
+        }
+    }
 
 
     async followUser(data: string): Promise<any> {

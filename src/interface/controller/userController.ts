@@ -117,6 +117,17 @@ class UserController {
             console.log('error in the loginwithgoogle userController -->', error);
         }
     }
+
+    
+    async userSearch(data: any) {
+        try {
+            console.log(data);
+            const result = await this.userService.searchUser(data);
+            return result;
+        } catch (error) {
+            console.log('error in the loginwithgoogle userController -->', error);
+        }
+    }
     
     async followUser(data: any) {
         try {

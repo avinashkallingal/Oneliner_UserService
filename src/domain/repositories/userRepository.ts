@@ -18,6 +18,18 @@ export class UserRepository {
             return null
         }
     }
+
+    async findEmailForForgotPass(email: string): Promise<IUser | null> {
+        try {
+            const user = await User.findOne({ email: email });
+            
+            return user
+        } catch (error) {
+            const err = error as Error;
+            console.log('error in findEmail in userRepository-->', err);
+            return null
+        }
+    }
    
 
     async saveUser(data: IUser): Promise<IUser> {
@@ -102,12 +114,12 @@ export class UserRepository {
            
             const res = await User.updateOne({ _id: data.userId }, { $push: { followings: data.followId } });
             const res1 = await User.updateOne({ _id: data.followId }, { $push: { followers: data.userId } });
-            if (res.modifiedCount > 0) {
+            if ((res.modifiedCount > 0) && (res1.modifiedCount > 0)) {
                 return { success: true, message: 'follow done' }
             } 
-            if (res1.modifiedCount > 0) {
-                return { success: true, message: 'follow done' }
-            }
+            // if (res1.modifiedCount > 0) {
+            //     return { success: true, message: 'follow done' }
+            // }
           
                 console.log(res,res1,'  default return flase in follow function')
                 return { success: false, message: 'Something went wrong, Plase try again later.' }          
@@ -221,6 +233,33 @@ export class UserRepository {
             return { success: false, message: `Error fetching user data: ${(error as Error).message}` };
         }
     }
+
+    async searchUser(
+        query: string
+      ): Promise<{ success: boolean; message: string; data?: any }> {
+        try {
+          console.log("Search Query:", query);
+      
+          // Use regex to find users with a partial match in relevant fields
+          const users = await User.find({
+            $or: [
+              { username: { $regex: query, $options: "i" } }, // Match in username field
+              { email: { $regex: query, $options: "i" } }, // Match in email field
+            ],
+          }).exec();
+      
+          console.log(users, "----------------------Matched Users");
+      
+          if (!users || users.length === 0) {
+            return { success: false, message: "No users found" };
+          }
+      
+          return { success: true, message: "Users found", data: users };
+        } catch (error) {
+          console.error("Error fetching user data", error);
+          return { success: false, message: `Error fetching user data: ${(error as Error).message}` };
+        }
+      }
 
 
 }
