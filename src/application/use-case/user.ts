@@ -11,8 +11,18 @@ interface user {
     email: string,
     password: string
 }
+interface MyDynamicObject {
+    [key: string]: any;
+  }
+  interface MyObject {
+    id: string;
+  }
+  interface userObject {
+    userId: string;
+  }
 
 export class UserService {
+    
 
     private userRepo: UserRepository;
 
@@ -20,7 +30,7 @@ export class UserService {
         this.userRepo = new UserRepository();
     }
 
-    async registerUser(userData: IUser): Promise<any> {
+    async registerUser(userData: IUser) {
         try {
             const existingUser = await this.userRepo.findEmail(userData.email);
             console.log(existingUser, 'user found');
@@ -41,7 +51,7 @@ export class UserService {
         }
     }
 
-    async save(userData: IUser): Promise<any> {
+    async save(userData: IUser) {
         try {
             console.log(userData, '------------------------------------------------userService')
             const result = await this.userRepo.saveUser(userData);
@@ -56,7 +66,7 @@ export class UserService {
         }
     }
 
-    async loginUser(data: user): Promise<any> {
+    async loginUser(data: user) {
         try {
             console.log(data, '------------------------------loginUser in userService');
             const result = await this.userRepo.checkUser(data.email, data.password);
@@ -66,7 +76,7 @@ export class UserService {
         }
     }
 
-    async verifyEmail(email: string): Promise<any> {
+    async verifyEmail(email: string) {
         try {
             const user = await this.userRepo.findEmailForForgotPass(email);
             console.log(user, 'user service in email verification');
@@ -87,7 +97,7 @@ export class UserService {
     }
 
     //
-    async resendOtp(email: string): Promise<any> {
+    async resendOtp(email: string) {
         try {
             // const user = await this.userRepo.findEmail(email);
             console.log("user service in resend otp");
@@ -109,7 +119,7 @@ export class UserService {
     }
     //
 
-    async resetPassword(email: string, password: string): Promise<any> {
+    async resetPassword(email: string, password: string) {
         try {
             let user = await this.userRepo.resetPassword(email, password);
             console.log(user);
@@ -118,8 +128,9 @@ export class UserService {
 
         }
     }
+  
 
-    async loginWithGoogle(data: any): Promise<any> {
+    async loginWithGoogle(data: MyDynamicObject) {
         try {
             const email = data.decoded.email;
             const username = data.decoded.name;
@@ -148,7 +159,7 @@ export class UserService {
         }
     }
     
-     async userDataFetch(data: any): Promise<any> {
+     async userDataFetch(data: {id:string,loginUserId:string}) {
         try {
             let user = await this.userRepo.findEmail(data.id);
             let loginUser=await this.userRepo.findEmail(data.loginUserId)
@@ -173,7 +184,7 @@ export class UserService {
         }
     }
 
-    async userDataFetchForInbox(data: any): Promise<any> {
+    async userDataFetchForInbox(data: userObject) {
         try {
             let user = await this.userRepo.findEmail(data.userId);
    
@@ -194,7 +205,7 @@ export class UserService {
     }
 
 
-    async contactsFetch(data: any): Promise<any> {
+    async contactsFetch(data: MyObject) {
         try {
             const user = await this.userRepo.findEmail(data.id);
             
@@ -219,7 +230,7 @@ export class UserService {
         }
     }
     
-    async searchUser(data: any): Promise<any> {
+    async searchUser(data: string) {
         try {
             let user = await this.userRepo.searchUser(data);
    
@@ -240,7 +251,7 @@ export class UserService {
     }
 
 
-    async followUser(data: string): Promise<any> {
+    async followUser(data: {userId:string,followId:string}) {
         try {
             let user = await this.userRepo.followUser(data);
             if(user.success){
@@ -257,7 +268,7 @@ export class UserService {
         }
     }
 
-    async unFollowUser(data: string): Promise<any> {
+    async unFollowUser(data: {userId:string,followId:string}) {
         try {
             let user = await this.userRepo.unFollowUser(data);
             if(user.success){

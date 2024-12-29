@@ -4,6 +4,10 @@ interface userData {
     email: string,
     isBlocked: boolean
 }
+interface user {
+    email: string,
+    password: string
+}
 class adminController {
     private adminService: AdminService;
 
@@ -11,7 +15,7 @@ class adminController {
         this.adminService = new AdminService();
     }
 
-    async login(data: any) {
+    async login(data: user) {
         try {
             // const email = data.email;
             // const password = data.password;

@@ -12,7 +12,7 @@ export class AdminService {
         this.adminRepo = new AdminRepositoty();
     }
 
-    async adminLogin(data: user): Promise<any> {
+    async adminLogin(data: user) {
         try {
             console.log(data,"data in admin usecase",data.email," email in usecase")
             const result = await this.adminRepo.checkAdmin(data.email, data.password);

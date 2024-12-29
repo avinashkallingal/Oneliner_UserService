@@ -1,7 +1,16 @@
 import { UserService } from "../../application/use-case/user";
 import { IUserDetails, IUserPostDetails } from "../../domain/entities/IUserDeatils";
+import { IUser } from "../../domain/entities/IUser";
+
+  interface IdObject {
+    id: string;
+  }
+  interface userObject {
+    userId: string;
+  }
 
 class UserController {
+    
 
     private userService: UserService;
 
@@ -9,7 +18,7 @@ class UserController {
         this.userService = new UserService();
     }
 
-    async registerUser(data: any) {
+    async registerUser(data: IUser) {
         try {
 
             const result = await this.userService.registerUser(data);
@@ -20,7 +29,7 @@ class UserController {
         }
     }
 
-    async saveUser(data: any) {
+    async saveUser(data: IUser) {
         try {
 
             const userData = await this.userService.save(data);
@@ -31,7 +40,7 @@ class UserController {
         }
     }
 
-    async loginUser(data: any) {
+    async loginUser(data:{email:string,password:string}) {
         try {
             console.log(data, '---------------------------');
             const result = await this.userService.loginUser(data);
@@ -42,7 +51,7 @@ class UserController {
         }
     }
 
-    async verifyEmail(data: any) {
+    async verifyEmail(data:{email:string}) {
         try {
             console.log(data);
             const result = await this.userService.verifyEmail(data.email);
@@ -57,7 +66,7 @@ class UserController {
         }
     }
 
-    async resendOtp(data: any) {
+    async resendOtp(data: string) {
         try {
             console.log(data);
             const result = await this.userService.resendOtp(data);
@@ -68,7 +77,7 @@ class UserController {
         }
     }
 
-    async resetPassword(data: any) {
+    async resetPassword(data: {email:string,newPassword:string}) {
         try {
             console.log(data);
             const result = await this.userService.resetPassword(data.email, data.newPassword);
@@ -78,7 +87,7 @@ class UserController {
         }
     }
 
-    async loginWithGoogle(data: any) {
+    async loginWithGoogle(data: {email:string,password:string}) {
         try {
             console.log(data);
             const result = await this.userService.loginWithGoogle(data);
@@ -98,7 +107,7 @@ class UserController {
         }
     }
 
-    async userDataFetchForInbox(data: any) {
+    async userDataFetchForInbox(data: userObject) {
         try {
             console.log(data);
             const result = await this.userService.userDataFetchForInbox(data);
@@ -108,9 +117,9 @@ class UserController {
         }
     }
     
-    async contactsFetch(data: any) {
+    async contactsFetch(data: IdObject) {
         try {
-            console.log(data);
+            console.log(data,"contact fetch data   ",typeof(data)," this is type of contact fetch data ********");
             const result = await this.userService.contactsFetch(data);
             return result;
         } catch (error) {
@@ -119,7 +128,7 @@ class UserController {
     }
 
     
-    async userSearch(data: any) {
+    async userSearch(data: string) {
         try {
             console.log(data);
             const result = await this.userService.searchUser(data);
@@ -129,7 +138,7 @@ class UserController {
         }
     }
     
-    async followUser(data: any) {
+    async followUser(data: {userId:string,followId:string}) {
         try {
             console.log(data);
             const result = await this.userService.followUser(data);
@@ -139,7 +148,7 @@ class UserController {
         }
     }
 
-    async unFollowUser(data: any) {
+    async unFollowUser(data: {userId:string,followId:string}) {
         try {
             console.log(data);
             const result = await this.userService.unFollowUser(data);
@@ -150,7 +159,7 @@ class UserController {
     }
 
 
-    async updateUserProfile(data: any) {
+    async updateUserProfile(data: string) {
         try {
             console.log(data);
             const result = await this.userService.updateUserProfile(data);

@@ -4,7 +4,7 @@ import { IUser } from '../entities/IUser';
 
 export class AdminRepositoty {
 
-    async checkAdmin(email: string, password: string): Promise<any> {
+    async checkAdmin(email: string, password: string) {
         try {
             const admin_data = await User.findOne({ email:email }).exec();
             console.log(email," email from client ",admin_data," admin data from db")

@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import { devNull } from "os";
 import { IUserDetails, IUserPostDetails } from "../../domain/entities/IUserDeatils";
 
+
 export class UserRepository {
 
     async findEmail(id: string): Promise<IUser | null> {
@@ -88,7 +89,7 @@ export class UserRepository {
         }
     }
 
-    async resetPassword(email: string, password: string): Promise<any> {
+    async resetPassword(email: string, password: string) {
         try {
             const newHashedPass = await bcrypt.hash(password, 10);
             let user_data = await User.findOne({ email }).exec();
@@ -109,7 +110,7 @@ export class UserRepository {
         }
     }
 
-    async followUser(data:any): Promise<any> {
+    async followUser(data:{userId:string,followId:string}) {
         try {
            
             const res = await User.updateOne({ _id: data.userId }, { $push: { followings: data.followId } });
@@ -134,7 +135,7 @@ export class UserRepository {
     }
 
 
-    async unFollowUser(data:any): Promise<any> {
+    async unFollowUser(data:{userId:string,followId:string}) {
         try {
            
             const res = await User.updateOne({ _id: data.userId }, { $pull: { followings: data.followId } });
