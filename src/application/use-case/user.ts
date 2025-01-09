@@ -163,6 +163,7 @@ export class UserService {
         try {
             let user = await this.userRepo.findEmail(data.id);
             let loginUser=await this.userRepo.findEmail(data.loginUserId)
+            console.log(data.id, "result got on user resu^^&55566665555&&&&&&^^^^lt ____________")
            
             if(user||loginUser){
             
