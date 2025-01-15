@@ -87,6 +87,26 @@ class UserController {
         }
     }
 
+    async savePost(data: {postId:string,userId:string}) {
+        try {
+            console.log(data);
+            const result = await this.userService.savePost(data.postId, data.userId);
+            return result;
+        } catch (error) {
+
+        }
+    }
+
+    async getSavedPosts(data: {postId:string,userId:string}) {
+        try {
+            console.log(data);
+            const result = await this.userService.getSavedPosts(data.postId, data.userId);
+            return result;
+        } catch (error) {
+
+        }
+    }
+
     async loginWithGoogle(data: {email:string,password:string}) {
         try {
             console.log(data);

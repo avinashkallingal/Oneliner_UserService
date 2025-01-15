@@ -128,7 +128,26 @@ export class UserService {
 
         }
     }
-  
+
+    async savePost(postId: string, userId: string) {
+        try {
+            let user = await this.userRepo.savePost(postId, userId);
+            console.log(user);
+            return user;
+        } catch (error) {
+
+        }
+    }
+    
+    async getSavedPosts(postId: string, userId: string) {
+        try {
+            let user = await this.userRepo.savePost(postId, userId);
+            console.log(user);
+            return user;
+        } catch (error) {
+
+        }
+    }
 
     async loginWithGoogle(data: MyDynamicObject) {
         try {
@@ -188,6 +207,7 @@ export class UserService {
     async userDataFetchForInbox(data: userObject) {
         try {
             let user = await this.userRepo.findEmail(data.userId);
+            console.log(data.userId," data in application layer *@@@@@@@@@@@@")
    
            
             if(user){        

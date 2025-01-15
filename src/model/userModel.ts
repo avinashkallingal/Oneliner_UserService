@@ -48,6 +48,10 @@ const userSchema: Schema = new Schema({
     type: [String],
     default: [],
   },
+  savedPost: {
+    type: [String],
+    default: [],
+  },
   isAdmin: {
     type: Boolean,
     default: false,

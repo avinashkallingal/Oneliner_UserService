@@ -110,6 +110,31 @@ export class UserRepository {
         }
     }
 
+    async savePost(postId: string, userId: string) {
+        try {
+           
+            let user_data = await User.findOne({ _id:userId }).exec();
+            if (user_data) {
+                console.log(postId+'if in repo$$$$$$$$$$$')
+                // const res = await User.updateOne({ _id: userId }, { $set: { savePost: newHashedPass } });
+                const res = await User.updateOne(
+                    { _id: userId },
+                    { $push: { savedPost: postId } }
+                  );
+                console.log(res);
+                return { success: true, message: 'post saved' }
+            } else {
+                console.log('else in repo')
+                return { success: false, message: 'Something went wrong, Plase try again later.' }
+            }
+
+        } catch (error) {
+            const err = error as Error;
+            console.error("Error saving user:", err);
+            throw new Error(`Error saving user: ${err.message}`);
+        }
+    }
+
     async followUser(data:{userId:string,followId:string}) {
         try {
            

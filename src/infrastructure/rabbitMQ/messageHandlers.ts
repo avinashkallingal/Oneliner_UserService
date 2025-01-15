@@ -66,6 +66,15 @@ export default class MessageHandlers {
         response = await userController.userSearch(data);
         break;
         
+        case "save_post":
+        console.log("Handling operation :", operation);
+        response = await userController.savePost(data);
+        break;        
+
+        case "get_save_post":
+        console.log("Handling operation :", operation);
+        response = await userController.getSavedPosts(data);
+        break;
         
         case "fetch-user-for-inbox":
         console.log("Handling operation :", operation);
