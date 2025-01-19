@@ -129,7 +129,7 @@ class UserController {
 
     async userDataFetchForInbox(data: userObject) {
         try {
-            console.log(data);
+            console.log(data,"data in user data fetch for inbox  @@@@@@@@@@@@@@@@@");
             const result = await this.userService.userDataFetchForInbox(data);
             return result;
         } catch (error) {

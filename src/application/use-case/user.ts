@@ -207,7 +207,7 @@ export class UserService {
     async userDataFetchForInbox(data: userObject) {
         try {
             let user = await this.userRepo.findEmail(data.userId);
-            console.log(data.userId," data in application layer *@@@@@@@@@@@@")
+            console.log(data," data in application layer *@@@@@@@@@@@@")
    
            
             if(user){        
