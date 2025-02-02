@@ -2,6 +2,23 @@ import bcrtpt from 'bcrypt';
 import { User } from '../../model/userModel';
 import { IUser } from '../entities/IUser';
 
+export interface userInterface {   
+    username: string;
+    email: string;
+    about?:string;
+    password: string;
+    gender?: string;
+    language?:string;
+    profilePicture?: string;
+    followers?: string[];
+    followings?: string[];
+    isOnline?:boolean;
+    isAdmin?: boolean;
+    desc?: string;
+    isBlocked?:boolean;
+    created_at?: Date;
+}
+
 export class AdminRepositoty {
 
     async checkAdmin(email: string, password: string) {
@@ -43,7 +60,7 @@ export class AdminRepositoty {
         }
     }
 
-    async changeStatus(email: string, isBlocked: boolean): Promise<{ success: boolean; message: string; blocked?:boolean}> {
+    async changeStatus(email: string, isBlocked: boolean): Promise<{ success: boolean; message: string; blocked?:boolean; user_data?:IUser}> {
         try {
             // Find the user by email
             const userData = await User.findOne({ email });
@@ -60,8 +77,14 @@ export class AdminRepositoty {
             const updated = await User.updateOne({ email: email }, { $set: { isBlocked: !userData.isBlocked } });
             console.log(updated," updated db response in admin repo")
             console.log('Matched:', updated.matchedCount, 'Modified:', updated.modifiedCount);
+
             if (updated.modifiedCount == 1) {
-                return { success: true, message: 'Status of the user is changed',blocked:!userData.isBlocked };
+                const userDataNew = await User.findOne({ email });
+                if (!userDataNew) {
+                    return { success: false, message: 'Error fetching updated user data' };
+                  }
+                
+                return { success: true, message: 'Status of the user is changed',blocked:!userData.isBlocked,user_data:userDataNew};
             } else {
                 return { success: false, message: 'Something went wrong. Try again later' };
             }

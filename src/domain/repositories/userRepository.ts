@@ -56,10 +56,12 @@ export class UserRepository {
 
             // Return the saved user data (you might want to omit the password)
             return newUser
+            
         } catch (error) {
             const err = error as Error;
             console.error("Error saving user:", err);
             throw new Error(`Error saving user: ${err.message}`);
+            
         }
     }
 
@@ -267,12 +269,17 @@ export class UserRepository {
           console.log("Search Query:", query);
       
           // Use regex to find users with a partial match in relevant fields
-          const users = await User.find({
-            $or: [
-              { username: { $regex: query, $options: "i" } }, // Match in username field
-              { email: { $regex: query, $options: "i" } }, // Match in email field
-            ],
+        //   const users = await User.find({
+        //     $or: [
+        //       { username: { $regex: query, $options: "i" } }, // Match in username field
+        //       { email: { $regex: query, $options: "i" } }, // Match in email field
+        //     ],
+        //   }).exec();
+
+        const users = await User.find({
+            username: { $regex: query, $options: "i" } // Case-insensitive match in username field only
           }).exec();
+          
       
           console.log(users, "----------------------Matched Users");
       

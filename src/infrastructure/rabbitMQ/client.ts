@@ -35,7 +35,7 @@ class RabbitMQClient {
             ]);
 
             await Promise.all([
-                this.producerChannel.assertQueue(rabbitMqConfig.rabbitMQ.queues.userQueue, { durable: true }),
+                // this.producerChannel.assertQueue(rabbitMqConfig.rabbitMQ.queues.userQueue, { durable: true }),
                 this.consumerChannel.assertQueue(rabbitMqConfig.rabbitMQ.queues.userQueue, { durable: true })
             ]);
 
